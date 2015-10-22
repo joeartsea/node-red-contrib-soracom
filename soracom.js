@@ -42,14 +42,14 @@ module.exports = function (RED) {
       var node = this;
       var credentials = RED.nodes.getCredentials(this.soracom);
       this.on('input', function (msg) {
-        node.sendMsg = function (err, res) {
+        node.sendMsg = function (err, res, body) {
           if (err) {
             node.error(err.toString());
             node.status({ fill: 'red', shape: 'ring', text: 'failed' });
           } else {
             node.status({});
           }
-          msg.payload = res.body;
+          msg.payload = body;
           node.send(msg);
         };
         var soracom = new Soracom({
