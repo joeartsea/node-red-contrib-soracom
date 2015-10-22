@@ -1,0 +1,135 @@
+<!--
+  Copyright 2015 Atsushi Kojo.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/x-red" data-template-name="soracom">
+  <div class="form-row">
+    <label for="node-config-input-email"><i class="fa fa-envelope-o"></i> Email</label>
+    <input type="text" id="node-config-input-email" placeholder="example@example.com" />
+  </div>
+  <div class="form-row">
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
+    <input type="password" id="node-config-input-password">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('soracom', {
+    category: 'config',
+    color: '#34cdd7',
+    defaults: {
+      email: { value: '', required: true }
+    },
+    credentials: {
+      email: { type: 'text', required: true },
+      password: { type: 'password', required: true }
+    },
+    label: function () {
+      return this.email;
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="soracom in">
+  <div class="form-row">
+    <label for="node-input-soracom"><i class="fa fa-user"></i> Log in as</label>
+    <input type="text" id="node-input-soracom">
+  </div>
+  <div class="form-row">
+    <label for="node-input-operation"><i class="fa fa-wrench"></i> Operation</label>
+    <select type="text" id="node-input-operation">
+      <option value="airStats">Air State</option>
+      <option value="beamStats">Beam State</option>
+      <option value="updateSpeedClass">Update Speed Class</option>
+      <option value="activate">Activate</option>
+      <option value="deactivate">Deactivate</option>
+    </select>
+  </div>
+  <div class="form-row input-speedClass-row hidden">
+    <label for="node-input-speedClass"><i class="fa fa-bolt"></i> Speed Class</label>
+    <select type="text" id="node-input-speedClass">
+      <option value="s1.minimum">s1.minimum</option>
+      <option value="s1.slow">s1.slow</option>
+      <option value="s1.standard">s1.standard</option>
+      <option value="s1.fast">s1.fast</option>
+    </select>
+  </div>
+  <div class="form-row input-recentXminutes-row hidden">
+    <label for="node-input-recentXminutes"><i class="fa fa-clock-o"></i> Recent Minutes</label>
+    <input type="text" id="node-input-recentXminutes" placeholder="5">
+  </div>
+  <div class="form-row input-period-row hidden">
+    <label for="node-input-period"><i class="fa fa-calendar-o"></i> Period</label>
+    <select type="text" id="node-input-period">
+      <option value="month">Month</option>
+      <option value="day">Day</option>
+      <option value="minutes">Minutes</option>
+    </select>
+  </div>
+  <div class="form-row">
+    <label for="node-input-imsi"><i class="fa fa-bookmark"></i> IMSI</label>
+    <input type="text" id="node-input-imsi" placeholder="IMSI">
+  </div>
+  <div class="form-row">
+    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+    <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+</script>
+
+<script type="text/javascript">
+  RED.nodes.registerType('soracom in', {
+    category: 'advanced',
+    color: '#34cdd7',
+    defaults: {
+      soracom: { type: 'soracom', required: true },
+      imsi: { value: '' },
+      operation: { value: 'airStats' },
+      speedClass: { value: 's1.minimum' },
+      recentXminutes: { value: '' },
+      period: { value: 'month' },
+      name: { value: '' }
+    },
+    icon: 'file.png',
+    inputs: 1,
+    outputs: 1,
+    label: function () {
+      return this.name || 'soracom';
+    },
+    labelStyle: function () {
+      return this.name ? 'node_label_italic' : '';
+    },
+    oneditprepare: function () {
+      var speedClass = $(".input-speedClass-row");
+      var recentXminutes = $(".input-recentXminutes-row");
+      var period = $(".input-period-row");
+      $("#node-input-operation").change(function () {
+        var id = $("#node-input-operation option:selected").val();
+        if (id == 'airStats' || id == 'beamStats') {
+          speedClass.hide();
+          recentXminutes.show();
+          period.show();
+        } else if (id == 'updateSpeedClass') {
+          speedClass.show();
+          recentXminutes.hide();
+          period.hide();
+        } else {
+          speedClass.hide();
+          recentXminutes.hide();
+          period.hide();
+        }
+      });
+    }
+  });
+</script>
