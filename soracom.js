@@ -32,16 +32,19 @@ module.exports = function (RED) {
   function SoracomInNode (n) {
     RED.nodes.createNode(this, n);
     this.soracom = n.soracom;
-    this.imsi = n.imsi;
+    this.targetId = n.targetId;
     this.operation = n.operation;
-    this.speedClass = n.speedClass || 's1.minimum';
-    this.recentXminutes = n.minutes || 5;
+    this.speedClass = n.speedClass;
+    this.recentXminutes = n.minutes;
     this.period = n.period || 'month';
     this.soracomConfig = RED.nodes.getNode(this.soracom);
     if (this.soracomConfig) {
       var node = this;
       var credentials = RED.nodes.getCredentials(this.soracom);
       this.on('input', function (msg) {
+        var targetId = msg.targetId || node.targetId;
+        var speedClass = msg.speedClass || node.speedClass || 's1.minimum';
+        var recentXminutes = msg.recentXminutes || node.recentXminutes || 5;
         node.sendMsg = function (err, res, body) {
           if (err) {
             node.error(err.toString());
@@ -63,11 +66,19 @@ module.exports = function (RED) {
           }
           soracom.defaults(auth);
           var nowDate = Math.floor(new Date().getTime() / 1000);
-          var recentDate = nowDate - (node.recentXminutes * 60);
+          var recentDate = nowDate - (recentXminutes * 60);
           switch (node.operation) {
+            case 'groups':
+              soracom.get('/groups', node.sendMsg);
+              break;
+            case 'subscribers':
+              soracom.get('/groups/:groupId/subscribers', {
+                groupId: targetId
+              }, node.sendMsg);
+              break;
             case 'airStats':
               soracom.get('/stats/air/subscribers/:imsi', {
-                imsi: node.imsi,
+                imsi: targetId,
                 from: recentDate,
                 to: nowDate,
                 period: node.period
@@ -75,7 +86,7 @@ module.exports = function (RED) {
               break;
             case 'beamStats':
               soracom.get('/stats/beam/subscribers/:imsi', {
-                imsi: node.imsi,
+                imsi: targetId,
                 from: recentDate,
                 to: nowDate,
                 period: node.period
@@ -83,18 +94,18 @@ module.exports = function (RED) {
               break;
             case 'updateSpeedClass':
               soracom.post('/subscribers/:imsi/update_speed_class', {
-                imsi: node.imsi,
-                speedClass: node.speedClass
+                imsi: targetId,
+                speedClass: speedClass
               }, node.sendMsg);
               break;
             case 'activate':
               soracom.post('/subscribers/:imsi/activate', {
-                imsi: node.imsi
+                imsi: targetId
               }, node.sendMsg);
               break;
             case 'deactivate':
               soracom.post('/subscribers/:imsi/deactivate', {
-                imsi: node.imsi
+                imsi: targetId
               }, node.sendMsg);
               break;
           }

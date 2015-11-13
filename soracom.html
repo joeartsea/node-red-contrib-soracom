@@ -50,6 +50,8 @@
   <div class="form-row">
     <label for="node-input-operation"><i class="fa fa-wrench"></i> Operation</label>
     <select type="text" id="node-input-operation">
+      <option value="groups">Group List</option>
+      <option value="subscribers">Group Subscribers</option>
       <option value="airStats">Air State</option>
       <option value="beamStats">Beam State</option>
       <option value="updateSpeedClass">Update Speed Class</option>
@@ -79,8 +81,8 @@
     </select>
   </div>
   <div class="form-row">
-    <label for="node-input-imsi"><i class="fa fa-bookmark"></i> IMSI</label>
-    <input type="text" id="node-input-imsi" placeholder="IMSI">
+    <label for="node-input-targetId"><i class="fa fa-bookmark"></i> IMSI/Group ID</label>
+    <input type="text" id="node-input-targetId" placeholder="IMSI/Group ID">
   </div>
   <div class="form-row">
     <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
@@ -94,9 +96,9 @@
     color: '#34cdd7',
     defaults: {
       soracom: { type: 'soracom', required: true },
-      imsi: { value: '' },
-      operation: { value: 'airStats' },
-      speedClass: { value: 's1.minimum' },
+      targetId: { value: '' },
+      operation: { value: 'groups' },
+      speedClass: { value: '' },
       recentXminutes: { value: '' },
       period: { value: 'month' },
       name: { value: '' }

@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-soracom",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A collection of Node-RED nodes for SORACOM.",
   "dependencies": {
     "soracom": "~0.0.x"
