@@ -16,13 +16,20 @@
 
 <script type="text/x-red" data-template-name="soracom">
   <div class="form-row">
-    <label for="node-config-input-email"><i class="fa fa-envelope-o"></i> Email</label>
+    <label for="node-config-input-email"><i class="fa fa-envelope-o"></i> <span data-i18n="soracom.label.email"></span></label>
     <input type="text" id="node-config-input-email" placeholder="example@example.com" />
   </div>
   <div class="form-row">
-    <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
+    <label for="node-config-input-password"><i class="fa fa-lock"></i> <span data-i18n="soracom.label.password"></span></label>
     <input type="password" id="node-config-input-password">
   </div>
+</script>
+
+<script type="text/x-red" data-help-name="soracom">
+  <p>Set authenticate information for SORACOM.</p>
+  <p></p>
+  <p><code>Email</code> sets the email of the SORACOM user.</p>
+  <p><code>Password</code> sets the password of the SORACOM user.</p>
 </script>
 
 <script type="text/javascript">
@@ -60,7 +67,7 @@
     </select>
   </div>
   <div class="form-row input-speedClass-row hidden">
-    <label for="node-input-speedClass"><i class="fa fa-bolt"></i> Speed Class</label>
+    <label for="node-input-speedClass"><i class="fa fa-bolt"></i> <span data-i18n="soracom_in.label.speedClass"></span></label>
     <select type="text" id="node-input-speedClass">
       <option value="s1.minimum">s1.minimum</option>
       <option value="s1.slow">s1.slow</option>
@@ -69,11 +76,11 @@
     </select>
   </div>
   <div class="form-row input-recentXminutes-row hidden">
-    <label for="node-input-recentXminutes"><i class="fa fa-clock-o"></i> Recent Minutes</label>
+    <label for="node-input-recentXminutes"><i class="fa fa-clock-o"></i> <span data-i18n="soracom_in.label.recentXminutes"></span></label>
     <input type="text" id="node-input-recentXminutes" placeholder="5">
   </div>
   <div class="form-row input-period-row hidden">
-    <label for="node-input-period"><i class="fa fa-calendar-o"></i> Period</label>
+    <label for="node-input-period"><i class="fa fa-calendar-o"></i> <span data-i18n="soracom_in.label.period"></span></label>
     <select type="text" id="node-input-period">
       <option value="month">Month</option>
       <option value="day">Day</option>
@@ -81,13 +88,74 @@
     </select>
   </div>
   <div class="form-row">
-    <label for="node-input-targetId"><i class="fa fa-bookmark"></i> IMSI/Group ID</label>
+    <label for="node-input-targetId"><i class="fa fa-bookmark"></i> <span data-i18n="soracom_in.label.targetId"></span></label>
     <input type="text" id="node-input-targetId" placeholder="IMSI/Group ID">
   </div>
   <div class="form-row">
-    <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-input-name" placeholder="Name">
+    <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="soracom_in.label.name"></span></label>
+    <input type="text" id="node-input-name" data-i18n="[placeholder]soracom_in.placeholder.name">
   </div>
+</script>
+
+<script type="text/x-red" data-help-name="soracom in">
+  <p>Use the SORACOM API to execute the following processing selected in <code>Operation</code>.</p>
+  <ul>
+    <li>Group List</li>
+    <li>Group Subscribers</li>
+    <li>Air State</li>
+    <li>Beam State</li>
+    <li>Update Speed Class</li>
+    <li>Activate</li>
+    <li>Deactivate</li>
+  </ul>
+
+  <h3>Outputs</h3>
+    <dl class="message-properties">
+        <dt>payload <span class="property-type">object</span></dt>
+        <dd>Output the execution result of the selected process in JSON format.</dd>
+    </dl>
+
+  <h3>Details</h3>
+  <h4>Group List</h4>
+    <p>Get a list of groups.</p>
+    <p><code>IMSI/Group ID</code>sets the group ID.</p>
+    <p>Outputs a list of groups.</p>
+
+  <h4>Group Subscribers</h4>
+    <p>Get a list of Subscribers belonging to the group specified by <code>IMSI/Group ID</code>.</p>
+    <p><code>IMSI/Group ID</code> sets the group ID.</p>
+    <p>Outputs a list of Subscribers that belong to the specified group by group ID.</p>
+
+  <h4>Air State</h4>
+    <p>Get Air Usage Report of Subscriber specified by <code>IMSI/Group ID</code>.</p>
+    <p><code>Recent Minutes</code> sets start time the aggregate data. The unit is <code>minutes</code>. Set the number of minutes before the current time to start counting.</p>
+    <p><code>Period</code> sets the aggregation unit.</p>
+    <p><code>IMSI/Group ID</code> sets IMSI(SIM ID).</p>
+    <p>Outputs the usage report for the subscriber.</p>
+
+  <h4>Beam State</h4>
+    <p>Get Beam Usage Report of Subscriber specified by <code>IMSI/Group ID</code>.</p>
+    <p><code>Recent Minutes</code> sets start time the aggregate data. The unit is <code>minutes</code>. Set the number of minutes before the current time to start counting.</p>
+    <p><code>Period</code> sets the aggregation unit.</p>
+    <p><code>IMSI/Group ID</code> sets IMSI(SIM ID).</p>
+    <p>Output Soracom Beam usage report for the Subscriber.</p>
+
+  <h4>Update Speed Class</h4>
+    <p>Update the Subscriber speed class of specified by <code>IMSI/Group ID</code>.</p>
+    <p><code>Speed Class</code> sets the speed class to change.</p>
+    <p><code>IMSI/Group ID</code> sets IMSI(SIM ID).</p>
+    <p>Outputs the updated details of the Subscriber.</p>
+
+  <h4>Activate</h4>
+    <p>Activates status of specified subscriber by <code>IMSI/Group ID</code>.</p>
+    <p><code>IMSI/Group ID</code> sets IMSI(SIM ID).</p>
+    <p>Outputs the updated details of the Subscriber.</p>
+
+  <h4>Deactivate</h4>
+    <p>Deactivates specified subscriber by <code>IMSI/Group ID</code>.</p>
+    <p><code>IMSI/Group ID</code> sets IMSI(SIM ID).</p>
+    <p>Outputs the updated details of the Subscriber.</p>
+
 </script>
 
 <script type="text/javascript">
