@@ -1,0 +1,20 @@
+{
+    "soracom" : {
+        "label" : {
+            "email" : "Email",
+            "password" : "Password"
+        }
+    },
+    "soracom_in" : {
+        "label" : {
+            "speedClass" : "Speed Class",
+            "recentXminutes" : "Recent Minutes",
+            "period" : "Period",
+            "targetId" : "IMSI/Group ID",
+            "name" : "Name"
+        },
+        "placeholder" : {
+            "name" : "Name"
+        }
+    }
+}

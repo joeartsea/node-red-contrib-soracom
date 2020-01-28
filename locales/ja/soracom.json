@@ -1,0 +1,20 @@
+{
+    "soracom" : {
+        "label" : {
+            "email" : "メールアドレス",
+            "password" : "パスワード"
+        }
+    },
+    "soracom_in" : {
+        "label" : {
+            "speedClass" : "速度クラス",
+            "recentXminutes" : "Recent Minutes",
+            "period" : "集計単位",
+            "targetId" : "IMSI/Group ID",
+            "name" : "名前"
+        },
+        "placeholder" : {
+            "name" : "名前"
+        }
+    }
+}
